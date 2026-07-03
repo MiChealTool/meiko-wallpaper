@@ -7,7 +7,7 @@ public class Wallpaper
 }
 "@
 
-$Folder = "C:\Company\Wallpaper"
+$Folder = "C:\Company\Wallpaper\T7"
 
 $Wallpaper1 = Join-Path $Folder "Wallpaper1.png"
 $Wallpaper2 = Join-Path $Folder "Wallpaper2.png"
