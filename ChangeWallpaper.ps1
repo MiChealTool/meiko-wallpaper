@@ -7,19 +7,25 @@ public class Wallpaper
 }
 "@
 
-$Folder = "C:\Company\Wallpaper\T7"
+$Folder = "C:\Company\Wallpaper"
+
 $Wallpaper1 = Join-Path $Folder "Wallpaper1.png"
 $Wallpaper2 = Join-Path $Folder "Wallpaper2.png"
-$StateFile = Join-Path $Folder "wallpaper.state"
+$StateFile  = Join-Path $Folder "wallpaper.state"
 
 if (!(Test-Path $Wallpaper1) -or !(Test-Path $Wallpaper2)) {
     exit
 }
 
-# Đọc trạng thái lần trước
 if (Test-Path $StateFile) {
-    $Current = Get-Content $StateFile
-} else {
+    try {
+        $Current = Get-Content $StateFile -ErrorAction Stop
+    }
+    catch {
+        $Current = "2"
+    }
+}
+else {
     $Current = "2"
 }
 
@@ -33,7 +39,12 @@ else {
 }
 
 # Đổi hình nền
-[Wallpaper]::SystemParametersInfo(20, 0, $NextWallpaper, 3) | Out-Null
+[Wallpaper]::SystemParametersInfo(20,0,$NextWallpaper,3) | Out-Null
 
-# Lưu trạng thái
-$NextState | Set-Content $StateFile
+# Ghi trạng thái an toàn
+try {
+    [System.IO.File]::WriteAllText($StateFile,$NextState)
+}
+catch {
+    # Bỏ qua nếu file đang bị khóa
+}
